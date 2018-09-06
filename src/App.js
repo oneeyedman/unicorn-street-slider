@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
@@ -8,21 +7,23 @@ class App extends Component {
 
     this.state = {
       sliderCurrent: 0,
-      sliderTotal: 4,
-      sliderPosition: '0%'
+      sliderTotal: 5,
+      sliderPosition: '0%',
+      sliderTransition: 'margin ease 1s'
     }
     this.getPosition = this.getPosition.bind(this);
   }
 
   componentDidMount() {
-    setInterval(this.getPosition, 3000);
+    this.effect = setInterval(this.getPosition, 3000);
   }
 
   createSlides() {
     const slides = [];
-    for (let s=0; s<this.state.sliderTotal; s++) {
+    for (let s=0; s<this.state.sliderTotal-1; s++) {
       slides.push(<div className={`slide slide--${s}`} key={s}>{s}</div>)
     }
+    slides.push(<div className={`slide slide--${0}`} key={'0c'}>{0}</div>)
     return slides;
   }
 
@@ -30,27 +31,37 @@ class App extends Component {
     let currentPosition = this.state.sliderPosition;
     let currentSlide = this.state.sliderCurrent;
     let totalSlides = this.state.sliderTotal;
-    if (currentSlide < totalSlides-1) {
-      // no es la última
-      currentSlide++;
-      const newPosition = `${currentSlide * -100}%`;
-      this.setState({
-        sliderCurrent: currentSlide,
-        sliderPosition: newPosition
-      });
-    } else {
+    
+    currentSlide++;
+    const newPosition = `${currentSlide * -100}%`;
+    this.setState({
+      sliderCurrent: currentSlide,
+      sliderPosition: newPosition,
+      sliderTransition: 'margin ease 1s'
+    });
+    if (currentSlide === totalSlides) {
       // es la última
+      clearInterval(this.effect);
+      
       this.setState({
         sliderCurrent: 0,
-        sliderPosition: '0%'
+        sliderPosition: '0%',
+        sliderTransition: 'none'
       });
+      this.effect = setInterval(this.getPosition, 3000);
     }
+
   }
 
   render() {
+    const sliderStyles = {
+      marginLeft: this.state.sliderPosition,
+      width: `${this.state.sliderTotal}00%`,
+      transition: this.state.sliderTransition
+    }
     return (
       <div className="visor">
-        <div className="slides" style={{marginLeft: this.state.sliderPosition, width: `${this.state.sliderTotal}00%`}}>
+        <div className="slides" style={sliderStyles}>
           {this.createSlides()}
         </div>
       </div>
