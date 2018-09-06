@@ -1,0 +1,27 @@
+.visor {
+  height: 100vh;
+  overflow: hidden;
+}
+.slides {
+  display: flex;
+}
+.slide {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+}
+.slide--0 {
+  background: yellow
+}
+.slide--1 {
+  background: orange
+}
+.slide--2 {
+  background: red
+}
+.slide--3 {
+  background: purple
+}
